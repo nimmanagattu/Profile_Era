@@ -1,7 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, FileText, Plus, Minus, ArrowRight } from 'lucide-react';
 import axios from 'axios';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
+// Admin Components
+import AdminLogin from './components/Admin/AdminLogin';
+import AdminDashboard from './components/Admin/AdminDashboard';
 
 
 
@@ -341,71 +346,121 @@ const AccordionItem = ({ title, content }) => {
     );
 };
 
-const Pricing = () => (
-    <section id="pricing" className="py-24 bg-white border-t border-gray-100">
-        <div className="max-w-6xl mx-auto px-6 md:px-10">
-            <SectionBranding title="PRICING" />
+const Pricing = () => {
+    const packages = [
+        {
+            name: "Launch",
+            subtitle: "Freshers / Interns",
+            price: "₹10,000",
+            color: "green",
+            who: ["Final-year students", "Fresh graduates", "Intern-to-job transition"],
+            includes: ["Resume structuring (ATS-friendly)", "LinkedIn profile optimization", "Role clarity & keyword alignment", "Guided job application strategy"],
+            note: "Interview opportunities depend on profile readiness and market demand."
+        },
+        {
+            name: "Professional",
+            subtitle: "2–4 Years Experience",
+            price: "₹25,000",
+            color: "blue",
+            who: ["Working professionals with 2–4 years experience", "Looking to switch roles or companies"],
+            includes: ["Resume rewriting (role-specific)", "LinkedIn + job portal optimization", "Profile positioning for target roles", "Profile marketing & recruiter outreach", "Interview opportunity tracking"]
+        },
+        {
+            name: "Advanced",
+            subtitle: "4+ Years Experience",
+            price: "₹35,000",
+            color: "red",
+            who: ["Mid-level professionals", "Stagnant growth or compensation", "Targeting senior or specialized roles"],
+            includes: ["Senior-level resume positioning", "Advanced keyword & ATS optimization", "Targeted profile marketing strategy", "Recruiter engagement & follow-ups", "Interview access coordination"]
+        }
+    ];
 
-            <div className="flex flex-col md:flex-row justify-center gap-10 max-w-6xl mx-auto">
-                {/* Phase 1 */}
-                <motion.div
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    className="flex-1 border-2 border-purple-100 rounded-[2.5rem] p-10 text-center bg-white hover:shadow-xl transition duration-300"
-                >
-                    <p className="font-bold text-gray-500 mb-1">Phase 1</p>
-                    <h3 className="font-bold text-gray-900 mb-6 text-2xl">Onboarding & Optimization</h3>
-                    <div className="bg-[#FAF5FF] inline-block px-6 py-2 rounded-full text-2xl font-black text-[#6D28D9] mb-4">
-                        ₹15,000 - ₹20,000
+    return (
+        <section id="pricing" className="py-24 bg-white border-t border-gray-100">
+            <div className="max-w-7xl mx-auto px-6 md:px-10">
+                <SectionBranding title="PRICING PACKAGES" />
+
+                <div className="grid lg:grid-cols-3 gap-8 mt-12">
+                    {packages.map((pkg, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.1 }}
+                            className="flex flex-col border-2 border-purple-100 rounded-[2.5rem] p-8 bg-white hover:shadow-2xl transition duration-300 relative overflow-hidden"
+                        >
+                            <div className={`absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 opacity-10 rounded-full bg-${pkg.color}-500`}></div>
+                            <div className="mb-8">
+                                <h3 className="text-3xl font-black text-gray-900 mb-1">{pkg.name}</h3>
+                                <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">{pkg.subtitle}</p>
+                            </div>
+
+                            <div className={`bg-purple-50 inline-block px-6 py-3 rounded-2xl text-3xl font-black text-[#6D28D9] mb-8 w-fit`}>
+                                {pkg.price}
+                            </div>
+
+                            <div className="mb-8">
+                                <h4 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wider">Who this is for:</h4>
+                                <ul className="space-y-2">
+                                    {pkg.who.map((item, idx) => (
+                                        <li key={idx} className="flex items-start text-sm text-gray-600 font-medium">
+                                            <span className="text-[#6D28D9] mr-2">•</span>
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <div className="mb-8 flex-grow">
+                                <h4 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wider">Includes:</h4>
+                                <ul className="space-y-2">
+                                    {pkg.includes.map((item, idx) => (
+                                        <li key={idx} className="flex items-start text-sm text-gray-700 font-medium">
+                                            <div className="w-1.5 h-1.5 bg-[#6D28D9] rounded-full mt-1.5 mr-3 flex-shrink-0"></div>
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            {pkg.note && (
+                                <div className="mt-8 p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                    <p className="text-xs text-gray-500 italic">
+                                        <span className="font-bold text-gray-700 not-italic uppercase mr-1">Note:</span>
+                                        {pkg.note}
+                                    </p>
+                                </div>
+                            )}
+                        </motion.div>
+                    ))}
+                </div>
+
+                <div className="mt-20">
+                    <div className="max-w-3xl mx-auto bg-[#F5EEFF] rounded-3xl p-10 border-2 border-purple-200">
+                        <h3 className="text-2xl font-black text-gray-900 mb-8 text-center uppercase tracking-wider">Payment Structure</h3>
+                        <div className="grid md:grid-cols-2 gap-8">
+                            <div className="bg-white p-6 rounded-2xl text-center shadow-sm">
+                                <div className="text-4xl font-black text-[#6D28D9] mb-2">60%</div>
+                                <div className="font-bold text-gray-700 uppercase tracking-widest text-sm">Onboarding</div>
+                            </div>
+                            <div className="bg-white p-6 rounded-2xl text-center shadow-sm">
+                                <div className="text-4xl font-black text-[#6D28D9] mb-2">40%</div>
+                                <div className="font-bold text-gray-700 uppercase tracking-widest text-sm text-wrap">After first interview engagement</div>
+                            </div>
+                        </div>
                     </div>
-                    <p className="text-sm text-gray-600 font-medium">[Profile setup, resume, positioning]</p>
-                </motion.div>
+                </div>
 
-                {/* Phase 2 */}
-                <motion.div
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    className="flex-1 border-2 border-purple-100 rounded-[2.5rem] p-10 text-center bg-white hover:shadow-xl transition duration-300"
-                >
-                    <p className="font-bold text-gray-500 mb-1">Phase 2</p>
-                    <h3 className="font-bold text-gray-900 mb-6 text-2xl">Interview Engagement Milestone</h3>
-                    <div className="bg-[#FAF5FF] inline-block px-6 py-2 rounded-full text-2xl font-black text-[#6D28D9] mb-4">
-                        ₹15,000 - ₹20,000
-                    </div>
-                    <p className="text-sm text-gray-600 font-medium">[After first recruiter response / interview movement]</p>
-                </motion.div>
-            </div>
-
-            <div className="mt-12 text-center">
-                <div className="bg-gray-100 inline-block px-12 py-4 rounded-xl text-2xl font-black text-gray-900">
-                    Total: ₹40,000+ GST
+                <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-center font-bold text-sm text-[#6D28D9] max-w-4xl mx-auto">
+                    <div className="p-4 bg-purple-50 rounded-xl">No hidden charges.</div>
+                    <div className="p-4 bg-purple-50 rounded-xl">You pay for execution, not dreams.</div>
+                    <div className="p-4 bg-purple-50 rounded-xl">No false promises.</div>
                 </div>
             </div>
-
-            <div className="grid grid-cols-3 mt-16 max-w-4xl mx-auto text-center font-bold text-sm text-[#6D28D9]">
-                <div>No hidden charges.</div>
-                <div>You pay for execution, not dreams.</div>
-                <div>No false promises.</div>
-            </div>
-
-            <div className="mt-20 text-center">
-                <div className="inline-block p-4 border-2 border-[#6D28D9] rounded-2xl mb-8">
-                    <img src="/handshake_icon.png" alt="Handshake" className="w-16 h-16" />
-                </div>
-                <div className="max-w-3xl mx-auto space-y-6 text-gray-800 font-medium text-lg leading-relaxed">
-                    <p>
-                        If you're qualified but invisible to recruiters, the problem is not your skill. It's your market positioning.
-                    </p>
-                    <p>
-                        We help professionals get interview access through structured <span className="text-[#6D28D9] font-bold">profile marketing</span> and recruiter outreach — ethically, legally, and transparently.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-);
+        </section>
+    );
+};
 
 const TrustSection = () => (
     <section id="trust" className="py-24 bg-white text-center border-t border-gray-100">
@@ -506,7 +561,7 @@ const ContactForm = () => {
             if (resume) data.append('resume', resume);
 
             const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-            await axios.post(`${apiUrl}/api/contact`, data, {
+            await axios.post(`${apiUrl}/api/leads`, data, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
             setStatus('success');
@@ -674,7 +729,7 @@ const Footer = () => (
     </footer>
 );
 
-const App = () => {
+const LandingPage = () => {
     return (
         <div className="font-sans text-gray-900 overflow-x-hidden">
             <Navbar />
@@ -687,6 +742,54 @@ const App = () => {
             <ContactForm />
             <Footer />
         </div>
+    );
+};
+
+const App = () => {
+    const [adminKey, setAdminKey] = useState(localStorage.getItem('adminKey'));
+
+    const handleLogin = (key) => {
+        setAdminKey(key);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('adminKey');
+        setAdminKey(null);
+    };
+
+    return (
+        <Router>
+            <Routes>
+                {/* Public Site */}
+                <Route path="/" element={<LandingPage />} />
+
+                {/* Admin Routes */}
+                <Route
+                    path="/admin"
+                    element={
+                        adminKey ? (
+                            <Navigate to="/admin/dashboard" />
+                        ) : (
+                            <AdminLogin onLogin={handleLogin} />
+                        )
+                    }
+                />
+
+                <Route
+                    path="/admin/dashboard"
+                    element={
+                        adminKey ? (
+                            <AdminDashboard adminKey={adminKey} onLogout={handleLogout} />
+                        ) : (
+                            <Navigate to="/admin" />
+                        )
+                    }
+                />
+
+                {/* Catch-all redirect to home */}
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+        </Router>
     );
 };
 

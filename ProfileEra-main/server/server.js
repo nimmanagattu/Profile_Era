@@ -41,13 +41,17 @@ app.use(cors({
         } else {
             callback(new Error('Not allowed by CORS'));
         }
-    }
+    },
+    allowedHeaders: ['Content-Type', 'x-admin-api-key']
 }));
 
 app.use(express.json());
 
+// Serve uploads as static files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Ensure uploads directory exists
-const uploadDir = 'uploads';
+const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
 }
@@ -70,46 +74,13 @@ mongoose.connect(MONGO_URI)
         }
     });
 
-// 2. Middleware & Admin Routes
-const checkAdminAuth = (req, res, next) => {
-    const apiKey = req.headers['x-admin-api-key'];
-    const validApiKey = process.env.ADMIN_API_KEY;
-
-    if (!validApiKey) {
-        return res.status(500).json({ error: "Server misconfiguration: ADMIN_API_KEY not set" });
-    }
-
-    if (apiKey && apiKey === validApiKey) {
-        next();
-    } else {
-        res.status(401).json({ error: "Unauthorized: Invalid API Key" });
-    }
-};
-
-// Admin Routes (Read-Only)
-app.get('/api/admin/leads', checkAdminAuth, async (req, res) => {
-    try {
-        const leads = await Lead.find().sort({ date: -1 });
-        res.json(leads);
-    } catch (error) {
-        res.status(500).json({ error: "Error fetching leads" });
-    }
-});
-
-app.get('/api/admin/leads/:id', checkAdminAuth, async (req, res) => {
-    try {
-        const lead = await Lead.findById(req.params.id);
-        if (!lead) {
-            return res.status(404).json({ error: "Lead not found" });
-        }
-        res.json(lead);
-    } catch (error) {
-        res.status(500).json({ error: "Error fetching lead details" });
-    }
-});
+// 2. Load Modular Admin Routes
+const adminRoutes = require('./routes/adminRoutes');
+app.use('/api/admin', adminRoutes);
 
 // 3. API Routes
-app.post('/api/contact', upload.single('resume'), async (req, res) => {
+// Public endpoint to receive form data from frontend
+app.post('/api/leads', upload.single('resume'), async (req, res) => {
     try {
         const { name, contact, linkedin, naukri } = req.body;
         const newLead = new Lead({
@@ -117,7 +88,7 @@ app.post('/api/contact', upload.single('resume'), async (req, res) => {
             contact,
             linkedin,
             naukri,
-            resume: req.file ? req.file.path : null
+            resume: req.file ? req.file.filename : null // Store only filename for easy static access
         });
         await newLead.save();
 
@@ -137,11 +108,16 @@ app.post('/api/contact', upload.single('resume'), async (req, res) => {
             }
         });
 
-        res.status(201).json({ message: "Lead saved successfully" });
+        res.status(201).json({ message: "Lead saved successfully", leadId: newLead._id });
     } catch (error) {
         console.error("Error saving lead:", error);
         res.status(500).json({ error: "Server error" });
     }
+});
+
+// Alias for legacy compat (optional)
+app.post('/api/contact', (req, res) => {
+    res.redirect(307, '/api/leads');
 });
 
 app.get('/', (req, res) => {
