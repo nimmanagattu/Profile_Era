@@ -62,19 +62,19 @@ const AdminDashboard = ({ adminKey, onLogout }) => {
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
             <AlertCircle size={48} className="text-red-500 mb-4" />
             <h2 className="text-2xl font-bold text-gray-800">{error}</h2>
-            <button onClick={fetchLeads} className="mt-6 bg-[#6D28D9] text-white px-8 py-3 rounded-xl font-bold uppercase tracking-wider">Retry</button>
+            <button onClick={fetchLeads} className="mt-6 bg-[#1D4ED8] text-white px-8 py-3 rounded-xl font-bold uppercase tracking-wider">Retry</button>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-[#FDFCFE] font-sans pb-20">
+        <div className="min-h-screen bg-blue-50 font-sans pb-20">
             {/* Header */}
-            <header className="bg-white border-b border-purple-100 px-6 py-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
+            <header className="bg-white border-b border-blue-100 px-6 py-4 flex items-center justify-between sticky top-0 z-30 shadow-sm">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-[#6D28D9] rounded-xl flex items-center justify-center text-white font-black text-xl">P</div>
+                    <div className="w-10 h-10 bg-[#1D4ED8] rounded-xl flex items-center justify-center text-white font-black text-xl">P</div>
                     <div>
                         <h1 className="text-xl font-black text-gray-900 uppercase tracking-tight">ProfileEra Admin</h1>
-                        <p className="text-[10px] text-purple-600 font-bold uppercase tracking-[0.2em] leading-none">Dashboard Control</p>
+                        <p className="text-[10px] text-blue-700 font-bold uppercase tracking-[0.2em] leading-none">Dashboard Control</p>
                     </div>
                 </div>
                 <button
@@ -95,7 +95,7 @@ const AdminDashboard = ({ adminKey, onLogout }) => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="bg-white p-6 rounded-[2rem] border-2 border-purple-50 shadow-sm flex items-center gap-5"
+                            className="bg-white p-6 rounded-[2rem] border-2 border-blue-50 shadow-sm flex items-center gap-5"
                         >
                             <div className={`w-14 h-14 bg-${stat.color}-50 text-${stat.color}-600 rounded-2xl flex items-center justify-center`}>
                                 {stat.icon}
@@ -109,15 +109,15 @@ const AdminDashboard = ({ adminKey, onLogout }) => {
                 </div>
 
                 {/* Main Table Section */}
-                <div className="bg-white border-2 border-purple-50 rounded-[2.5rem] shadow-xl overflow-hidden min-h-[500px]">
-                    <div className="p-8 border-b border-purple-50 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="bg-white border-2 border-blue-50 rounded-[2.5rem] shadow-xl overflow-hidden min-h-[500px]">
+                    <div className="p-8 border-b border-blue-50 flex flex-col md:flex-row items-center justify-between gap-6">
                         <h2 className="text-2xl font-black text-gray-900 uppercase tracking-tight">Submitted Leads</h2>
                         <div className="relative w-full md:w-96">
                             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                             <input
                                 type="text"
                                 placeholder="Search by name or number..."
-                                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-purple-100 rounded-2xl focus:bg-white focus:ring-2 focus:ring-purple-100 outline-none transition-all font-medium text-sm"
+                                className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-blue-100 rounded-2xl focus:bg-white focus:ring-2 focus:ring-blue-100 outline-none transition-all font-medium text-sm"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -127,7 +127,7 @@ const AdminDashboard = ({ adminKey, onLogout }) => {
                     <div className="overflow-x-auto">
                         {loading ? (
                             <div className="flex flex-col items-center justify-center py-20">
-                                <RefreshCcw size={40} className="text-purple-400 animate-spin mb-4" />
+                                <RefreshCcw size={40} className="text-blue-400 animate-spin mb-4" />
                                 <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Loading Leads...</p>
                             </div>
                         ) : filteredLeads.length === 0 ? (
@@ -137,7 +137,7 @@ const AdminDashboard = ({ adminKey, onLogout }) => {
                             </div>
                         ) : (
                             <table className="w-full text-left">
-                                <thead className="bg-[#F9F7FF] text-[#6D28D9] text-[11px] font-black uppercase tracking-[0.15em]">
+                                <thead className="bg-blue-50 text-[#1D4ED8] text-[11px] font-black uppercase tracking-[0.15em]">
                                     <tr>
                                         <th className="px-8 py-5">Full Name</th>
                                         <th className="px-8 py-5">Contact Info</th>
@@ -147,18 +147,18 @@ const AdminDashboard = ({ adminKey, onLogout }) => {
                                         <th className="px-8 py-5 text-right w-20">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-purple-50">
+                                <tbody className="divide-y divide-blue-50">
                                     {filteredLeads.map((lead, i) => (
                                         <motion.tr
                                             key={lead.id}
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                             transition={{ delay: i * 0.05 }}
-                                            className="hover:bg-purple-50/30 transition-colors group"
+                                            className="hover:bg-blue-50/30 transition-colors group"
                                         >
                                             <td className="px-8 py-6">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center text-[#6D28D9] font-bold text-sm">
+                                                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-[#1D4ED8] font-bold text-sm">
                                                         {lead.name.charAt(0)}
                                                     </div>
                                                     <span className="font-bold text-gray-900">{lead.name}</span>
@@ -167,7 +167,7 @@ const AdminDashboard = ({ adminKey, onLogout }) => {
                                             <td className="px-8 py-6">
                                                 <div className="flex flex-col gap-1">
                                                     <div className="flex items-center gap-2 text-xs font-bold text-gray-700">
-                                                        <Phone size={14} className="text-purple-400" />
+                                                        <Phone size={14} className="text-blue-400" />
                                                         {lead.contact}
                                                     </div>
                                                 </div>

@@ -31,15 +31,15 @@ const AdminLogin = ({ onLogin }) => {
     };
 
     return (
-        <div className="min-h-screen bg-[#F5EEFF] flex items-center justify-center px-4 font-sans">
+        <div className="min-h-screen bg-[#EFF6FF] flex items-center justify-center px-4 font-sans">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="max-w-md w-full"
             >
-                <div className="bg-white rounded-[2.5rem] p-10 shadow-2xl border-2 border-purple-100">
+                <div className="bg-white rounded-[2.5rem] p-10 shadow-2xl border-2 border-blue-100">
                     <div className="flex flex-col items-center mb-8">
-                        <div className="w-20 h-20 bg-purple-100 rounded-3xl flex items-center justify-center mb-6 text-[#6D28D9]">
+                        <div className="w-20 h-20 bg-blue-100 rounded-3xl flex items-center justify-center mb-6 text-[#1D4ED8]">
                             <Lock size={40} />
                         </div>
                         <h2 className="text-3xl font-black text-gray-900 uppercase tracking-wider">Admin Portal</h2>
@@ -56,7 +56,7 @@ const AdminLogin = ({ onLogin }) => {
                                 <input
                                     type="password"
                                     placeholder="Enter your secret key"
-                                    className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white transition-all focus:ring-2 focus:ring-purple-100 outline-none font-medium"
+                                    className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white transition-all focus:ring-2 focus:ring-blue-100 outline-none font-medium"
                                     value={apiKey}
                                     onChange={(e) => setApiKey(e.target.value)}
                                     required
@@ -77,7 +77,7 @@ const AdminLogin = ({ onLogin }) => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-[#6D28D9] text-white py-5 rounded-xl font-bold text-lg hover:bg-[#5B21B6] transition-all shadow-lg shadow-purple-200 flex items-center justify-center gap-2 group disabled:opacity-70 uppercase tracking-widest"
+                            className="w-full bg-[#1D4ED8] text-white py-5 rounded-xl font-bold text-lg hover:bg-[#1E40AF] transition-all shadow-lg shadow-blue-200 flex items-center justify-center gap-2 group disabled:opacity-70 uppercase tracking-widest"
                         >
                             {loading ? 'Verifying...' : 'Login to Dashboard'}
                             <ArrowRight className="group-hover:translate-x-1 transition-transform" />
